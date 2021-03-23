@@ -11,8 +11,27 @@ export default function App(props: TextInputProps) {
 
   const [smsnumber, setSMS] = useState(0)
   function WordCounterHeandler(){
-    if(wordCounter <= 0 ||  text.length <= 0) return;
-    setSMS (Math.floor(text.length/wordCounter));
+    if(text.length <= 0) {
+      setSMS (0);
+      return;
+    }
+
+    if(wordCounter <= 0) {
+      setSMS (1);
+      return;
+    }
+    let count = 0;
+    const words = text.split(' ');
+    let neededSms = words.length > 0 ? 1 : 0;
+    words.forEach(word => {
+      if((count + word.length)  > wordCounter) {
+        count = word.length > wordCounter ? 0 : word.length;
+        neededSms++;
+      } else {
+        count += word.length;
+      }
+    });
+    setSMS (neededSms);
   }
   // React.useEffect(()=> {
   //   WordCounterHeandler();
