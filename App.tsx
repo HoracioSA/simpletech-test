@@ -1,12 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React,{useCallback, useEffect, useState} from 'react';
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+interface TextInputProps{
+  value: number;
+  limit: number;
+}
+export default function App(props: TextInputProps) {
+  const [ wordCounter, setWordCounter] = useState(0)
+  const [text, setText] = useState('');
 
-export default function App() {
+  const [smsnumber, setSMS] = useState(0)
+  function WordCounterHeandler(){
+    if(wordCounter <= 0 ||  text.length <= 0) return;
+    setSMS (Math.floor(text.length/wordCounter));
+  }
+  // React.useEffect(()=> {
+  //   WordCounterHeandler();
+  // },[wordCounter, text]);
+  
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <TextInput style={styles.textInput} onChangeText={text => setText(text)} placeholder="Isert  here your text" multiline={true}>
+      </TextInput>
+      <View style={styles.viewInputGroup}>
+      <TextInput style={styles.textInputLimite} onChangeText={text => setWordCounter(Number(text))}>
+      </TextInput>
+      <Text>quantity of simbols</Text>
+      </View>
+      <TouchableOpacity onPress={WordCounterHeandler} style={styles.button}>
+          <Text style={styles.text}>Scan quantity of SMS</Text>
+      </TouchableOpacity>
+      <Text style={styles.results}>Needed SMS: {smsnumber}</Text>
     </View>
   );
 }
@@ -14,8 +38,54 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#cfcfcf',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button:{
+    height:60,
+    width:300,
+    backgroundColor: '#417ed9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius:10,
+    marginTop:10,
+    borderColor:'#0c0d0d',
+    borderWidth:1,
+    
+    
+  },
+  text:{
+    color: 'white',
+    fontSize:18,
+  },
+  textInput:{
+    height:300,
+    width:300,
+    backgroundColor: '#fff',
+    borderColor:'#0c0d0d',
+    borderWidth:1,
+    padding:10
+  },
+  textInputLimite:{
+    height:50,
+    width:60,
+    backgroundColor: '#fff',
+    marginTop:10,
+    padding:10,
+    borderColor:'#0c0d0d',
+    borderWidth:1,
+    fontSize:20,
+  },
+  viewInputGroup:{
+    width:'70%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  results:{
+    marginTop:20,
+    fontSize:20,
+  }
 });
